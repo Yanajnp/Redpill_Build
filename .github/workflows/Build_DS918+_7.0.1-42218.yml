@@ -1,8 +1,6 @@
 name: Build DS918+ 7.0.1-42218
 
 on:
-  schedule:
-    - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
       clean_cache:
@@ -50,8 +48,10 @@ jobs:
           cd /home/runner/redpill-load 
           ./ext-manager.sh add 'https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/rpext-index.json'
           ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json'
-          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmxnet3/rpext-index.json'
+          ./ext-manager.sh add 'https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/rpext-index.json'
+          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json'
+          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmw_pvscsi/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000e/rpext-index.json'
@@ -59,9 +59,8 @@ jobs:
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/r8125/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/igbvf/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/ixgbe/rpext-index.json'
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/ixgbevf/rpext-index.json
-   
-   - name: 编译引导
+          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/ixgbevf/rpext-index.json  
+      - name: 编译引导
         run: |
           cd /home/runner/redpill-load
           sudo BRP_JUN_MOD=1 BRP_DEBUG=1 BRP_USER_CFG=ds918p_user_config.json ./build-loader.sh '${{matrix.platform}}' '${{matrix.version}}'
