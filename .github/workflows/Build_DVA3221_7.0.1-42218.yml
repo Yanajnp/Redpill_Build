@@ -42,21 +42,16 @@ jobs:
           wget https://raw.githubusercontent.com/pocopico/rp-ext/master/redpill/releases/redpill-4.4.180plus-denverton.tgz
           tar zxvf redpill-4.4.180plus-denverton.tgz -C ./
           mv ./redpill.ko /home/runner/redpill-load/ext/rp-lkm/redpill-linux-v4.4.180+.ko
-           
+          
       - name: 添加扩展驱动
         run: |
           cd /home/runner/redpill-load 
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmxnet3/rpext-index.json'
-          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000e/rpext-index.json'
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/r8168/rpext-index.json'  
-       - name: 删除扩展驱动
-        run: |
-          cd /home/runner/redpill-load 
-          ./ext-manager.sh remove 'jumkey.acpid'
-          sudo rm -rf /home/runner/redpill-load/redpill-acpid
-          
-        - name: 删除扩展驱动
+         ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmxnet3/rpext-index.json'
+         ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
+         ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000e/rpext-index.json'
+         ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/r8168/rpext-index.json'    
+      
+      - name: 删除扩展驱动
         run: |
           cd /home/runner/redpill-load 
           ./ext-manager.sh remove 'jumkey.acpid2'
@@ -85,9 +80,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: 上传引导镜像到 Github Actions
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{matrix.platform}} ${{matrix.version}}
-          path: /home/runner/redpill-load/images/*.img
-          if-no-files-found: error
+#      - name: 上传引导镜像到 Github Actions
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{matrix.platform}} ${{matrix.version}}
+#          path: /home/runner/redpill-load/images/*.img
+#          if-no-files-found: error
