@@ -48,16 +48,16 @@ jobs:
       - name: 添加扩展驱动
         run: |
           cd /home/runner/redpill-load 
- #        ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json'
+          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmxnet3/rpext-index.json'
           ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000e/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/r8168/rpext-index.json'  
- #     - name: 删除扩展驱动
- #       run: |
- #         cd /home/runner/redpill-load 
- #         ./ext-manager.sh remove 'jumkey.acpid2'
- #         sudo rm -rf /home/runner/redpill-load/redpill-acpid
+       - name: 删除扩展驱动
+        run: |
+          cd /home/runner/redpill-load 
+          ./ext-manager.sh remove 'jumkey.acpid'
+          sudo rm -rf /home/runner/redpill-load/redpill-acpid
           
       - name: 编译引导
         run: |
