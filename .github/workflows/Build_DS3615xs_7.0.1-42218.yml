@@ -32,7 +32,7 @@ jobs:
       - name: 获取项目描述
         id: desc
         run: |
-          wget https://raw.githubusercontent.com/Online24Hours/Redpill_Build/main/README.MD -O /home/runner/desc.txt
+          wget https://raw.githubusercontent.com/Mr-jiangrj/Redpill_Build/main/README.MD -O /home/runner/desc.txt
           echo "::set-output name=description::$(cat /home/runner/desc.txt)"
         
       - name: 环境准备
@@ -40,25 +40,26 @@ jobs:
           sudo apt update
           sudo apt-get install -y curl bspatch jq git
           git clone https://github.com/jumkey/redpill-load.git /home/runner/redpill-load
-          wget https://raw.githubusercontent.com/Online24Hours/Redpill_Build/main/ds3615xs_user_config.json -O /home/runner/redpill-load/ds3615xs_user_config.json
+          wget https://raw.githubusercontent.com/Mr-jiangrj/Redpill_Build/main/ds3615xs_user_config.json -O /home/runner/redpill-load/ds3615xs_user_config.json
           wget https://raw.githubusercontent.com/pocopico/rp-ext/main/redpill/releases/redpill-3.10.108.tgz
           tar zxvf redpill-3.10.108.tgz -C ./
           mv ./redpill.ko /home/runner/redpill-load/ext/rp-lkm/redpill-linux-v3.10.108.ko
           
       - name: 添加扩展驱动
         run: |
-          cd /home/runner/redpill-load 
+          cd /home/runner/redpill-load
+          sed -i 's#https://github.com/jumkey/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json#https://github.com/pocopico/rp-ext/raw/main/redpill-boot-wait/rpext-index.json#g' ./bundled-exts.json
+          sed -i 's#https://github.com/jumkey/redpill-load/raw/develop/redpill-virtio/rpext-index.json#https://raw.githubusercontent.com/pocopico/redpill-load/develop/redpill-virtio/rpext-index.json#g' ./bundled-exts.json
           ./ext-manager.sh add 'https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/rpext-index.json'
           ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json'
           ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmxnet3/rpext-index.json'
-          ./ext-manager.sh add 'https://github.com/pocopico/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json' 
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/vmw_pvscsi/rpext-index.json'
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000/rpext-index.json'
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/e1000e/rpext-index.json'
-          ./ext-manager.sh add 'https://raw.githubusercontent.com/pocopico/rp-ext/master/r8168/rpext-index.json'
+          
       - name: 编译引导
         run: |
           cd /home/runner/redpill-load
+          sed -i 's/dddd26891815ddca02d0d53c1d42e8b39058b398a4cc7b49b80c99f851cf0ef7/ae1aca3b178a00689b93e97cca680b56af3f453174b852e0047496120dee2ee3/g' ./config/DS3615xs/7.0.1-42218/config.json
+          sed -i 's/d29b695612710376734cb5c5b5ae4f2d8afc49ffd640387e1c86010f6c7d2c8a/354f0bb13c898a7b24f2942d8015f591f7acce1739e2060580c0f38c41addaf7/g' ./config/DS3615xs/7.0.1-42218/config.json
+          sed -i 's/4c90c3c7ee25b5fcc651552e80a9364d22823c863c834c5f43e3344a3a68af78/3a8c2fe60142d3eb3a7ed2381819faa1db2cda30ff163288dd0a6c85a25815c1/g' ./config/DS3615xs/7.0.1-42218/config.json
           sudo BRP_JUN_MOD=1 BRP_DEBUG=1 BRP_USER_CFG=ds3615xs_user_config.json ./build-loader.sh '${{matrix.platform}}' '${{matrix.version}}'
           
       - name: 上传引导镜像到 Github Releases
@@ -72,13 +73,13 @@ jobs:
           files: |
             /home/runner/redpill-load/images/*.img
             
-      - name: 删除旧的 Release 项目
-        uses: dev-drprasad/delete-older-releases@v0.2.0
-        with:
-          repo: Online24Hours/Redpill_Build
-          keep_latest: 1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: 删除旧的 Release 项目
+#        uses: dev-drprasad/delete-older-releases@v0.2.0
+#        with:
+#          repo: Mr-jiangrj/Redpill_Build
+#          keep_latest: 1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 #      - name: 上传引导镜像到 Github Actions
 #        uses: actions/upload-artifact@v3
